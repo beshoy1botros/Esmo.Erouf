@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const db = require("./db"); // الاتصال بقاعدة البيانات
+const db = require("./db"); // الاتصال بقاعدة البيانات عبر Pool
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -14,8 +14,9 @@ app.post("/api/register", (req, res) => {
   if (!name || !password || !phase || !level) {
     return res.status(400).json({ error: "يجب ملء جميع الحقول" });
   }
+
   // التحقق إن كان الاسم موجود مسبقًا
-  const checkQuery = "SELECT * FROM esmo_erouf WHERE name = ?";
+  const checkQuery = "SELECT * FROM `esmo-erouf` WHERE name = ?";
   db.query(checkQuery, [name], (err, results) => {
     if (err) {
       console.error("خطأ في التحقق من المستخدم:", err);
@@ -26,7 +27,7 @@ app.post("/api/register", (req, res) => {
     }
     // إدخال بيانات المستخدم
     const insertQuery =
-      "INSERT INTO esmo_erouf (name, password, phase, level) VALUES (?, ?, ?, ?)";
+      "INSERT INTO `esmo-erouf` (name, password, phase, level) VALUES (?, ?, ?, ?)";
     db.query(insertQuery, [name, password, phase, level], (err, results) => {
       if (err) {
         console.error("خطأ أثناء التسجيل:", err);
@@ -43,7 +44,7 @@ app.post("/api/login", (req, res) => {
   if (!name || !password) {
     return res.status(400).json({ error: "يجب ملء جميع الحقول" });
   }
-  const query = "SELECT * FROM esmo_erouf WHERE name = ? AND password = ?";
+  const query = "SELECT * FROM `esmo-erouf` WHERE name = ? AND password = ?";
   db.query(query, [name, password], (err, results) => {
     if (err) {
       console.error("خطأ أثناء تسجيل الدخول:", err);
@@ -56,9 +57,18 @@ app.post("/api/login", (req, res) => {
   });
 });
 
+// مثال على استعلام عرض جميع المستخدمين عند بدء التشغيل
+db.query("SELECT * FROM `esmo-erouf`", (err, results) => {
+  if (err) {
+    console.error("خطأ في الاستعلام:", err);
+    return;
+  }
+  console.log("النتائج:", results);
+});
+
 // نقطة نهاية لاسترجاع جميع المستخدمين (لوحة تحكم)
 app.get("/api/users", (req, res) => {
-  const query = "SELECT * FROM Esmo Erouf";
+  const query = "SELECT * FROM `esmo-erouf`";
   db.query(query, (err, results) => {
     if (err) {
       console.error("خطأ في جلب المستخدمين:", err);
@@ -70,22 +80,4 @@ app.get("/api/users", (req, res) => {
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`الخادم يعمل على المنفذ ${port}`);
-});
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-
-// مثال: الحصول على كلمة السر من الطلب (في حال استخدام Express)
-app.post("/register", (req, res) => {
-  // تأكد أن لديك body-parser أو express.json() لتفكيك JSON
-  const { password } = req.body; // هنا يتم تعريف المتغير password
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error hashing password");
-    } else {
-      // استخدم قيمة hash في تخزين كلمة المرور المشفرة في قاعدة البيانات
-      // ...
-      res.send("تم التسجيل بنجاح!");
-    }
-  });
 });

@@ -117,8 +117,8 @@ const hymnNamesOwlaya = {
   "المستوي الثاني": [
     "تي شوري السنوي",
     "ذوكصولوجية الاباء الرسل (كيريوس)",
-    "المزمور 149 الهوس الرابع",
     "مرد (اوس بيرين) للقداس الباسيلي",
+    "المزمور 149 الهوس الرابع",
   ],
   الموهوبين: [
     "لبش الهوس الاول خين اوشوت (اول ربعين باللحن+التكملة دمج+اخر 3 ارباع بالطريقة المطولة)",
@@ -261,7 +261,6 @@ const videoURLs = {
       "https://www.youtube.com/watch?v=jFO2dlI7yyU",
       "https://www.youtube.com/watch?v=SOXEIj43DVg",
       "https://www.youtube.com/watch?v=iIVPPPayfYk",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     ],
     "المستوي الثاني": [
       "https://www.youtube.com/watch?v=s9dP-j8u7u0",
@@ -277,20 +276,19 @@ const videoURLs = {
   },
   "اولي وتانيه": {
     "المستوي الاول": [
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-      "http://techslides.com/demos/sample-videos/small.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "https://www.youtube.com/watch?v=YDG5SlbM-7M",
+      "https://www.youtube.com/watch?v=NnvMalZCeVA",
+      "https://www.youtube.com/watch?v=vjB7gY_wgtw",
+      "https://www.youtube.com/watch?v=hXS3O8hkEKQ",
     ],
     "المستوي الثاني": [
-      "http://techslides.com/demos/sample-videos/small.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      "https://www.youtube.com/watch?v=ivRDyjwad3I",
+      "https://www.youtube.com/watch?v=97QDmOgr2Zk",
+      "https://www.youtube.com/watch?v=UcBqXdocQsA"
     ],
     الموهوبين: [
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      "https://www.youtube.com/watch?v=l7i80RIFCvw",
+      "https://www.youtube.com/watch?v=o7Sa2sUkubk",
     ],
   },
   "تالته ورابعه": {
@@ -405,7 +403,8 @@ function displayVideos() {
   container.innerHTML = "";
   const videos = getVisibleVideos();
   if (videos.length === 0) {
-    container.innerHTML = "<p>لا توجد ألحان متاحة حالياً للمرحلة والمستوى المحددين.</p>";
+    container.innerHTML =
+      "<p>لا توجد ألحان متاحة حالياً للمرحلة والمستوى المحددين.</p>";
     return;
   }
   const hymnArray = getHymnNamesForPhase();
@@ -416,7 +415,9 @@ function displayVideos() {
     const card = document.createElement("div");
     card.className = "video-card";
     const hymnName = hymnArray[index] ? hymnArray[index] : "اللحن " + videoId;
-    let videoURL = urlsArray[videoId - 1] || "http://techslides.com/demos/sample-videos/small.mp4";
+    let videoURL =
+      urlsArray[videoId - 1] ||
+      "http://techslides.com/demos/sample-videos/small.mp4";
 
     let mediaElement;
     if (videoURL.includes("youtube.com/watch")) {
@@ -441,7 +442,9 @@ function displayVideos() {
     }
     let extraParagraph = "";
     if (phase !== "حضانة" && phase !== "اولي وتانيه") {
-      extraParagraph = `<p>${uniqueTexts[index] || "هذا هو الوصف الخاص بالفيديو رقم " + (index + 1)}</p>`;
+      extraParagraph = `<p>${
+        uniqueTexts[index] || "هذا هو الوصف الخاص بالفيديو رقم " + (index + 1)
+      }</p>`;
     }
     card.innerHTML = `
       <div class="video-header">
@@ -650,7 +653,9 @@ function handleLogout() {
 /***** قسم الألحان *****/
 function updateUserGreeting() {
   if (loggedInUser) {
-    document.getElementById("userGreeting").textContent = `مرحباً ${loggedInUser.name} | المرحلة: ${loggedInUser.phase} | المستوى: ${loggedInUser.level}`;
+    document.getElementById(
+      "userGreeting"
+    ).textContent = `مرحباً ${loggedInUser.name} | المرحلة: ${loggedInUser.phase} | المستوى: ${loggedInUser.level}`;
   }
 }
 
@@ -674,7 +679,9 @@ function checkForUpdates() {
     .then((response) => response.json())
     .then((data) => {
       if (data.version !== CURRENT_VERSION) {
-        alert("تم العثور على تحديث جديد! سيتم إعادة تحميل التطبيق لتطبيق التحديث.");
+        alert(
+          "تم العثور على تحديث جديد! سيتم إعادة تحميل التطبيق لتطبيق التحديث."
+        );
         window.location.reload(true);
       }
     })
